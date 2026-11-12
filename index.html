@@ -246,6 +246,106 @@ footer.site p{max-width:none;margin:0}
 .hero.has-photo svg.art{display:none}
 @media print{.photo{display:none}.hero.has-photo{background-image:none!important}}
 table:not(:has(th:nth-child(3))){min-width:0}
+
+/* ---------- Motion (only when html.anim is set: JS on, reduced motion off) ---------- */
+#scrollbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:40;transform:scaleX(0);transform-origin:left;
+  background:linear-gradient(90deg,var(--blue-strong),#9be0ff);box-shadow:0 0 12px var(--blue),0 0 24px var(--blue-strong);pointer-events:none}
+.hero svg.ecg{position:absolute;left:0;right:0;bottom:0;width:100%;height:70px;pointer-events:none}
+.ecg path{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
+.ecg .base{opacity:.22}
+.ecg .run{opacity:0;filter:drop-shadow(0 0 6px var(--blue))}
+html.anim .ecg .run{opacity:1;stroke-dasharray:14 86;animation:ecg 5s linear infinite}
+@keyframes ecg{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+html.anim .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s);will-change:opacity,transform}
+html.anim .rv.in{opacity:1;transform:none}
+html.anim .rv.from-left{transform:translateX(-34px)} html.anim .rv.from-right{transform:translateX(34px)}
+html.anim .rv.from-left.in,html.anim .rv.from-right.in{transform:none}
+html.anim .photo img,html.anim .photo video{transform:scale(1.1);transition:transform 1.8s cubic-bezier(.2,.7,.2,1)}
+html.anim .photo.in img,html.anim .photo.in video{transform:none}
+html.anim .view.enter{animation:viewIn .5s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+html.anim .hero .hi{opacity:0;transform:translateY(22px);animation:heroIn .8s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--d,0s)}
+@keyframes heroIn{to{opacity:1;transform:none}}
+html.anim .hero h1{animation-name:heroIn,glowPulse;animation-duration:.8s,4.5s;animation-delay:var(--d,0s),1.2s;animation-iteration-count:1,infinite;animation-timing-function:cubic-bezier(.2,.7,.2,1),ease-in-out}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 22px rgba(86,198,255,.45)}50%{text-shadow:0 0 38px rgba(86,198,255,.9),0 0 70px rgba(31,157,255,.35)}}
+html.anim .chain li::before{transform:scaleX(0);transform-origin:left center;transition:transform .55s ease;transition-delay:var(--d,0s)}
+html.anim .chain li.in::before{transform:scaleX(1)}
+html.anim .chain .num{transform:scale(.4);transition:transform .5s cubic-bezier(.3,1.6,.5,1),box-shadow .5s;transition-delay:var(--d,0s)}
+html.anim .chain li.in .num{transform:none}
+html.anim .chain li.in .num{animation:nodePulse 3.2s ease-in-out infinite;animation-delay:calc(var(--d,0s) + .8s)}
+@keyframes nodePulse{0%,100%{box-shadow:0 0 14px rgba(31,157,255,.5)}50%{box-shadow:0 0 30px rgba(86,198,255,.95)}}
+html.anim .loop li::before{transition:transform .5s cubic-bezier(.3,1.6,.5,1);transition-delay:calc(var(--d,0s) + .15s);transform:scale(.3)}
+html.anim .loop li.in::before{transform:none}
+html.anim .card,html.anim .path,html.anim .opt,html.anim .btn{transition:transform .25s ease,box-shadow .25s ease,border-color .2s ease,opacity .7s ease}
+html.anim .path:hover,html.anim .grid2 > .card:hover{transform:translateY(-5px);box-shadow:var(--glow)}
+html.anim .btn.primary:hover{transform:translateY(-2px)}
+html.anim .opt:hover{transform:translateX(4px)}
+html.anim .fb:not(:empty){animation:pop .35s cubic-bezier(.3,1.4,.5,1)}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(6px)}to{opacity:1;transform:none}}
+html.anim .result{transition:border-color .3s,box-shadow .3s} html.anim .result.flash{animation:flash .6s ease}
+@keyframes flash{0%{box-shadow:0 0 0 rgba(86,198,255,0)}40%{box-shadow:0 0 28px rgba(86,198,255,.8)}100%{box-shadow:0 0 0 rgba(86,198,255,0)}}
+html.anim .progress progress{transition:none}
+main{overflow-x:clip}
+@media (max-width:760px){
+  html.anim .rv.from-left,html.anim .rv.from-right{transform:translateY(26px)}
+  html.anim .chain li::before{transform:scaleY(0);transform-origin:center top}
+  html.anim .chain li.in::before{transform:scaleY(1)}
+}
+@media print{html.anim .rv,html.anim .hero .hi{opacity:1!important;transform:none!important;animation:none!important} #scrollbar,.ecg{display:none!important}}
+
+/* ---------- v1.0 design pass: lists, steps, type ---------- */
+.hero h1{font-size:clamp(2.1rem,5.4vw,3.5rem);letter-spacing:-.01em;line-height:1.05;max-width:16ch}
+.view{position:relative;z-index:0}
+.view[data-mark]::before{content:attr(data-mark);position:absolute;right:-6px;top:-34px;z-index:-1;font-family:var(--display);font-weight:800;
+  font-size:clamp(7rem,17vw,13rem);line-height:1;color:transparent;-webkit-text-stroke:2px rgba(86,198,255,.13);pointer-events:none;user-select:none}
+.view > h1 .w{display:inline-block;background:linear-gradient(180deg,#fff 35%,#9bdcff);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* feature lists */
+.fx{list-style:none;padding:0;margin:0 0 1em;counter-reset:fx}
+.fx > li{position:relative;max-width:none;padding:12px 4px 12px 46px;border-bottom:1px solid rgba(255,255,255,.08);counter-increment:fx}
+.fx > li:last-child{border-bottom:0}
+.fx > li::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:linear-gradient(90deg,var(--blue),transparent 70%);transform:scaleX(0);transform-origin:left}
+ul.fx > li::before{content:"";position:absolute;left:12px;top:19px;width:10px;height:10px;transform:rotate(45deg);border:2px solid var(--blue);box-shadow:0 0 10px rgba(86,198,255,.8);background:rgba(86,198,255,.15)}
+ol.fx > li::before{content:counter(fx,decimal-leading-zero);position:absolute;left:0;top:11px;font-family:var(--mono);font-weight:700;font-size:1rem;color:var(--blue);text-shadow:0 0 10px rgba(86,198,255,.7)}
+.fx > li:hover{background:linear-gradient(90deg,rgba(86,198,255,.07),transparent 60%)}
+/* big numbered steps */
+.loop{gap:16px}
+.loop li{position:relative;overflow:hidden;padding:20px 18px 18px;border-color:rgba(86,198,255,.3);background:linear-gradient(180deg,#232830,#1b1f25)}
+.loop li::before{content:counter(s,decimal-leading-zero);display:block;width:auto;height:auto;border-radius:0;background:none;box-shadow:none;margin:0 0 8px;
+  font-family:var(--display);font-size:3.6rem;font-weight:800;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--blue);place-items:initial;transform-origin:left center}
+.loop li::after{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:linear-gradient(90deg,var(--blue-strong),#9be0ff 60%,transparent);transform-origin:left;box-shadow:0 0 12px var(--blue)}
+.loop strong{font-family:var(--display);font-size:1.15rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.loop li.lit{border-color:var(--blue);box-shadow:var(--glow)}
+.loop li.lit::before{color:var(--blue);text-shadow:0 0 22px rgba(86,198,255,.75)}
+/* marquee */
+.marquee{overflow:hidden;margin:0 0 22px;border-top:1px solid rgba(86,198,255,.35);border-bottom:1px solid rgba(86,198,255,.35);padding:12px 0;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee .track{display:flex;gap:42px;width:max-content;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3.6vw,2.4rem);letter-spacing:.06em}
+.marquee .track span{color:transparent;-webkit-text-stroke:1.2px rgba(201,209,220,.75)}
+.marquee .track span.b{color:var(--blue);-webkit-text-stroke:0;text-shadow:0 0 18px rgba(86,198,255,.7)}
+.marquee .track i{font-style:normal;color:var(--blue);opacity:.8}
+tbody tr:hover{background:rgba(86,198,255,.06)}
+html.anim .marquee .track{animation:marq 26s linear infinite}
+@keyframes marq{to{transform:translateX(-50%)}}
+html.anim .fx > li{opacity:0;transform:translateX(-22px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1),background .2s;transition-delay:var(--d,0s)}
+html.anim .fx > li.in{opacity:1;transform:none}
+html.anim .fx > li::after{transition:transform .8s ease;transition-delay:calc(var(--d,0s) + .15s)}
+html.anim .fx > li.in::after{transform:scaleX(1)}
+html.anim .loop li::after{transform:scaleX(0);transition:transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--d,0s) + .1s)}
+html.anim .loop li.in::after{transform:scaleX(1)}
+html.anim .loop li{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1),border-color .4s,box-shadow .4s}
+html.anim .loop li::before{transition:transform .6s cubic-bezier(.3,1.5,.5,1),color .4s,text-shadow .4s;transition-delay:calc(var(--d,0s) + .15s)}
+html.anim .tablewrap tbody tr{opacity:0;transform:translateY(10px)}
+html.anim .tablewrap.in tbody tr{animation:rowIn .5s ease both;animation-delay:calc(var(--i,0) * 70ms + .15s)}
+@keyframes rowIn{to{opacity:1;transform:none}}
+html.anim .tablewrap thead th{position:relative}
+html.anim .view.enter > h1 .w{animation:wordIn .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 70ms)}
+@keyframes wordIn{from{opacity:0;transform:translateY(.55em);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+html.anim .view.enter[data-mark]::before{animation:markIn 1.2s cubic-bezier(.2,.7,.2,1) both}
+@keyframes markIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+html.anim .card,html.anim .path,html.anim .q,html.anim .loop li{background-image:radial-gradient(280px circle at var(--mx,-999px) var(--my,-999px),rgba(86,198,255,.14),transparent 65%)}
+html.anim .loop li{background-image:radial-gradient(280px circle at var(--mx,-999px) var(--my,-999px),rgba(86,198,255,.16),transparent 65%),linear-gradient(180deg,#232830,#1b1f25)}
+@media (max-width:560px){.loop li::before{font-size:3rem} .view[data-mark]::before{top:-18px}}
+@media print{.view[data-mark]::before,.marquee{display:none!important} .view > h1 .w{color:#000!important;background:none!important;-webkit-text-fill-color:#000} .fx > li,.tablewrap tbody tr{opacity:1!important;transform:none!important;animation:none!important} .loop li::before{-webkit-text-stroke:1px #000}}
 </style>
 </head>
 <body>
@@ -261,6 +361,7 @@ table:not(:has(th:nth-child(3))){min-width:0}
   <button class="btn small" type="button" id="menuBtn" aria-expanded="false" aria-controls="sidenav">Menu</button>
 </header>
 
+<div id="scrollbar" aria-hidden="true"></div>
 <div class="shell">
 <nav id="sidenav" aria-label="Site sections">
   <ul><li><a href="#overview" data-route="overview"><span class="n">&#8962;</span>Overview</a></li></ul>
@@ -293,6 +394,10 @@ table:not(:has(th:nth-child(3))){min-width:0}
 <!-- ===================== OVERVIEW ===================== -->
 <section class="view" data-route="overview" aria-labelledby="h-overview">
   <div class="hero">
+    <svg class="ecg" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true">
+      <path class="base" pathLength="100" d="M0 52 H150 l12 -7 12 7 h36 l9 -34 13 60 11 -38 9 12 H470 l12 -7 12 7 h36 l9 -34 13 60 11 -38 9 12 H790 l12 -7 12 7 h36 l9 -34 13 60 11 -38 9 12 H1200"/>
+      <path class="run" pathLength="100" d="M0 52 H150 l12 -7 12 7 h36 l9 -34 13 60 11 -38 9 12 H470 l12 -7 12 7 h36 l9 -34 13 60 11 -38 9 12 H790 l12 -7 12 7 h36 l9 -34 13 60 11 -38 9 12 H1200"/>
+    </svg>
     <svg class="art" viewBox="0 0 400 400" aria-hidden="true">
       <defs><filter id="g"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
       <g fill="none" stroke="#56c6ff" filter="url(#g)">
@@ -331,6 +436,7 @@ table:not(:has(th:nth-child(3))){min-width:0}
 
   
 
+  <div class="marquee" aria-hidden="true"><div class="track"><span class="b">RECOGNIZE</span><i>&#9670;</i><span>RESPOND</span><i>&#9670;</i><span class="b">REASSESS</span><i>&#9670;</i><span>REPORT</span><i>&#9670;</i><span class="b">RECOGNIZE</span><i>&#9670;</i><span>RESPOND</span><i>&#9670;</i><span class="b">REASSESS</span><i>&#9670;</i><span>REPORT</span><i>&#9670;</i><span class="b">RECOGNIZE</span><i>&#9670;</i><span>RESPOND</span><i>&#9670;</i><span class="b">REASSESS</span><i>&#9670;</i><span>REPORT</span><i>&#9670;</i><span class="b">RECOGNIZE</span><i>&#9670;</i><span>RESPOND</span><i>&#9670;</i><span class="b">REASSESS</span><i>&#9670;</i><span>REPORT</span><i>&#9670;</i></div></div>
   <div class="card">
     <h2>What this lesson demonstrates</h2>
     <p>Every part of this lesson traces back to a job task. Each link in the chain below has its own section in the design review.</p>
@@ -972,6 +1078,7 @@ function renderChecklist(){
 function updateRubric(){
   var k = rubric(CHECKLIST, state.cl), box = $("#clResult");
   box.setAttribute("data-state", k);
+  if(motionOn){ box.classList.remove("flash"); void box.offsetWidth; box.classList.add("flash"); }
   box.innerHTML = "";
   box.appendChild(document.createTextNode("Result: " + RUBRIC_TEXT[k][0]));
   box.appendChild(el("small",null,RUBRIC_TEXT[k][1]));
@@ -999,6 +1106,107 @@ function buildChrome(){
   });
 }
 
+
+/* ---------- Motion ---------- */
+var motionOn = false, io = null;
+function setupMotion(){
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce || !("IntersectionObserver" in window) || /[?&]static\b/.test(location.search)) return;
+  motionOn = true;
+  document.documentElement.classList.add("anim");
+  // hero stagger
+  $all(".hero > *:not(svg)").forEach(function(e,i){ e.classList.add("hi"); e.style.setProperty("--d", (0.08*i).toFixed(2)+"s"); });
+  // reveal targets
+  var sel = ".view > .card, .view > .notice, .view > .sme-note, .view > .scenario, .view > .tablewrap, .view > figure.photo, .view > h2, .view > .lede, .view > .btnrow, .grid2 > .card, .loop > li, .chain > li, .stats > li, [data-q] > .q, #kc > .q, #results > *";
+  function tag(root){
+    $all(sel, root).forEach(function(e){
+      if(e.classList.contains("rv") || e.closest(".hero")) return;
+      e.classList.add("rv");
+      var sibs = Array.prototype.slice.call(e.parentNode.children).filter(function(x){ return x.tagName === e.tagName; });
+      var idx = sibs.indexOf(e), group = e.parentNode.matches(".grid2,.loop,.chain,.stats");
+      e.style.setProperty("--d", (group ? Math.min(idx,7)*0.11 : 0).toFixed(2)+"s");
+      if(e.parentNode.matches(".grid2") && sibs.length === 2) e.classList.add(idx === 0 ? "from-left" : "from-right");
+      io.observe(e);
+    });
+  }
+  io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); } });
+  }, {threshold:0.12, rootMargin:"0px 0px -6% 0px"});
+  tag(document);
+  window.__retag = tag;
+  // scroll progress + hero parallax
+  var bar = $("#scrollbar"), hero = $(".hero"), ticking = false;
+  function onScroll(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      var doc = document.documentElement, max = doc.scrollHeight - window.innerHeight, y = window.scrollY || doc.scrollTop;
+      bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, y/max) : 0) + ")";
+      if(hero && current === "overview") hero.style.backgroundPosition = "center, center " + (30 + y*0.035).toFixed(2) + "%";
+      ticking = false;
+    });
+  }
+  window.addEventListener("scroll", onScroll, {passive:true}); window.addEventListener("resize", onScroll);
+  onScroll();
+}
+function motionEnter(route){
+  if(!motionOn) return;
+  var v = $('.view[data-route="'+route+'"]'); if(!v) return;
+  $all(".rv.in, .fx > li.in").forEach(function(e){ if(!v.contains(e)) e.classList.remove("in"); });
+  if(window.__retag) window.__retag(v);
+  v.classList.remove("enter"); void v.offsetWidth; v.classList.add("enter");
+  var bar = $("#scrollbar"); if(bar) bar.style.transform = "scaleX(0)";
+}
+
+
+/* ---------- v1.0 design pass ---------- */
+function designPass(){
+  // feature lists
+  $all(".view .card ul, .view .card ol, .view > ul, .view > ol").forEach(function(l){
+    if(l.matches(".loop,.chain,.facts,.stats,.timeline,.reflist")) return;
+    l.classList.add("fx");
+  });
+  // section watermark + word-split headings
+  $all(".view[data-step]").forEach(function(v){ v.setAttribute("data-mark", "0" + v.getAttribute("data-step")); });
+  $all(".view[data-d]").forEach(function(v){ v.setAttribute("data-mark", "ABCDEFGHIJ".charAt(Number(v.getAttribute("data-d")) - 1)); });
+  $all(".view > h1").forEach(function(h1){
+    var words = h1.textContent.trim().split(/\s+/); h1.textContent = "";
+    words.forEach(function(w,i){ var s = el("span",{"class":"w"}, w); s.style.setProperty("--i", i); h1.appendChild(s); if(i < words.length-1) h1.appendChild(document.createTextNode(" ")); });
+  });
+  $all(".tablewrap tbody tr").forEach(function(tr){ tr.style.setProperty("--i", Math.min(Array.prototype.indexOf.call(tr.parentNode.children, tr), 12)); });
+}
+function motionExtras(){
+  // list items
+  var lio = new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting) en.target.classList.add("in"); }); }, {threshold:0.2, rootMargin:"0px 0px -5% 0px"});
+  $all(".fx > li").forEach(function(li){ li.style.setProperty("--d", (Math.min(Array.prototype.indexOf.call(li.parentNode.children, li), 9) * 0.09).toFixed(2) + "s"); lio.observe(li); });
+  // steps light up as they cross the middle of the screen
+  var sio = new IntersectionObserver(function(es){ es.forEach(function(en){ en.target.classList.toggle("lit", en.isIntersecting); }); }, {rootMargin:"-30% 0px -30% 0px", threshold:0});
+  $all(".loop > li").forEach(function(li){ sio.observe(li); });
+  // cursor spotlight + tilt
+  var main = $("#main");
+  main.addEventListener("pointermove", function(ev){
+    var t = ev.target.closest ? ev.target.closest(".card,.path,.q,.loop li") : null; if(!t) return;
+    var r = t.getBoundingClientRect();
+    t.style.setProperty("--mx", (ev.clientX - r.left) + "px"); t.style.setProperty("--my", (ev.clientY - r.top) + "px");
+    if(t.classList.contains("path") && ev.pointerType === "mouse"){
+      var rx = ((ev.clientY - r.top) / r.height - 0.5) * -6, ry = ((ev.clientX - r.left) / r.width - 0.5) * 8;
+      t.style.transform = "perspective(900px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) translateY(-4px)";
+    }
+  });
+  main.addEventListener("pointerout", function(ev){
+    var t = ev.target.closest ? ev.target.closest(".card,.path,.q,.loop li") : null; if(!t || (ev.relatedTarget && t.contains(ev.relatedTarget))) return;
+    t.style.setProperty("--mx","-999px"); t.style.setProperty("--my","-999px"); if(t.classList.contains("path")) t.style.transform = "";
+  });
+  // count up the facts
+  $all(".facts .v").forEach(function(v){
+    var txt = v.textContent; if(!/\d/.test(txt)) return;
+    var t0 = null, dur = 1100;
+    function step(ts){ if(t0 === null) t0 = ts; var p = Math.min(1,(ts - t0)/dur), e = 1 - Math.pow(1 - p, 3);
+      v.textContent = txt.replace(/\d+/g, function(n){ return String(Math.round(Number(n) * e)); });
+      if(p < 1) requestAnimationFrame(step); else v.textContent = txt; }
+    setTimeout(function(){ requestAnimationFrame(step); }, 900);
+  });
+}
+
 /* ---------- Routing ---------- */
 var current = null;
 function routeExists(r){ return !!r && /^[a-z0-9-]+$/.test(r) && !!$('.view[data-route="'+r+'"]'); }
@@ -1012,6 +1220,7 @@ function go(route, opts){
   if(route === "learn-6") renderResults();
   var pv = $("#scVideo"); if(pv && !pv.paused){ try{ pv.pause(); }catch(e){} }
   current = route;
+  motionEnter(route);
   if(!opts.fromHash){ try{ if(location.hash !== "#"+route) location.hash = route; }catch(e){} }
   closeMenu();
   if(!opts.noFocus){
@@ -1022,7 +1231,7 @@ function go(route, opts){
   return true;
 }
 function closeMenu(){ $("#sidenav").classList.remove("open"); $("#menuBtn").setAttribute("aria-expanded","false"); }
-function renderAll(){ Object.keys(PRACTICE).forEach(renderPractice); renderKC(); renderChecklist(); }
+function renderAll(){ Object.keys(PRACTICE).forEach(renderPractice); renderKC(); renderChecklist(); if(window.__retag) window.__retag(document); }
 function resetAll(){
   state = freshState(); renderAll(); go("overview");
   announce("Demo reset. All answers and checklist ratings cleared.");
@@ -1059,6 +1268,9 @@ function init(){
     var r = (location.hash || "").replace(/^#/,"");
     if(r && r !== current) go(r, {fromHash:true});
   });
+  designPass();
+  setupMotion();
+  if(motionOn) motionExtras();
   var start = (location.hash || "").replace(/^#/,"");
   go(routeExists(start) ? start : "overview", {fromHash:true, noFocus:true});
 }
